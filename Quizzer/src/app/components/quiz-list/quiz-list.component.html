@@ -1,0 +1,24 @@
+<nz-space nzSize="middle" nzDirection="vertical" style="width: 100%;">
+  <nz-space-item *ngFor="let item of items">
+    <nz-card [nzActions]="[TakeExam]" nzBordered="true" nzSize="small">
+      <nz-card-meta [nzTitle]="item.theme" nzDescription=""></nz-card-meta>
+      <div fxLayout="row" fxLayoutAlign="space-around end">
+        <div>
+          hi
+        </div>
+        <div>
+          bye
+        </div>
+        <div>
+          he
+        </div>
+      </div>
+    </nz-card>
+
+    <ng-template #TakeExam>
+      <a nz-button nzType="link" nzBlock="true">
+        Take Exam
+      </a>
+    </ng-template>
+  </nz-space-item>
+</nz-space>

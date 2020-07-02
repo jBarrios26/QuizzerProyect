@@ -41,6 +41,10 @@ export class Question extends BaseEntity {
   @Column("int")
   numOfOptions: number;
 
+  @Field(() => Int)
+  @Column('int')
+  answer: number[];
+
   @Field(() => Quiz)
   @ManyToOne(() => Quiz, (quiz) => quiz.questions, { nullable: false })
   quiz: Quiz;

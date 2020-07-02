@@ -1,0 +1,10 @@
+query QuizList {
+  getQuizzes {
+    user {
+      username
+    }
+    id
+    theme
+    numberOfQuestions
+  }
+}

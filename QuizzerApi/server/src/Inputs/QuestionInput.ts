@@ -17,6 +17,9 @@ export class QuestionInput {
   @Field(() => Int)
   points: number;
 
+  @Field(() => Int)
+  answer: number[];
+
   @Field(() => QuestionType)
   type: QuestionType;
 

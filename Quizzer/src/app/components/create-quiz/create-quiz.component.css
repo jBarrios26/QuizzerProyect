@@ -1,0 +1,29 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+
+.question-generator {
+  align-content: center;
+  margin: 15px;
+  padding: 5px 5px;
+  background-color: #1f1f1f;
+}
+
+nz-select {
+  width: max-content;
+}
+
+.option-container {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+[nz-radio] {
+  display: block;
+  height: 32px;
+  line-height: 32px;
+}

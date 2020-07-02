@@ -4,7 +4,4 @@ import { Field, InputType } from 'type-graphql';
 export class OptionInput {
   @Field(() => String)
   content: string;
-
-  @Field(() => Boolean)
-  answer: boolean;
 }

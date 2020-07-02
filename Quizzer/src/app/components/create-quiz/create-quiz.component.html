@@ -1,0 +1,257 @@
+<div class="form-container">
+  <h1 style="text-align: center;" nz-typography>
+    <u>Create Quiz</u><i nz-icon nzType="form"></i>
+  </h1>
+  <nz-divider nzText="Information" nzOrientation="left"></nz-divider>
+  <form nz-form nzLayout="horizontal" [formGroup]="quiz">
+    <nz-form-item nzAlign="middle">
+      <nz-form-label nzSpan="6" nzRequired nzFor="theme">Theme</nz-form-label>
+      <nz-form-control nzSpan="14">
+        <input nz-input formControlName="theme" id="theme" name="theme" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item nzAlign="middle">
+      <nz-form-label nzSpan="6" nzFor="author" nzRequired="true"
+        >Author</nz-form-label
+      >
+      <nz-form-control nzSpan="14">
+        <input nz-input formControlName="author" id="author" name="author" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item nzAlign="middle">
+      <nz-form-label nzSpan="6" nzFor="Nquestions" nzRequired="true"
+        >Number of Questions</nz-form-label
+      >
+      <nz-form-control nzSpan="4">
+        <nz-input-number
+          [nzMax]="15"
+          [nzMin]="1"
+          formControlName="numOfQuestions"
+          id="Nquestions"
+          name="Nquestions"
+        ></nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+    <!--Area para desplegar las  preguntas.-->
+    <nz-divider nzText="Questions" nzOrientation="left"></nz-divider>
+    <div formArrayName="questions" style="margin: 0px 12px 0px 12px;">
+      <nz-space nzDirection="vertical" nzSize="small" style="width: 100%;">
+        <nz-space-item
+          class="questions"
+          *ngFor="let question of questionForms.controls; let i = index"
+          [formGroupName]="i"
+        >
+          <nz-card
+            [nzTitle]="'Question #' + (i + 1)"
+            [nzExtra]="delete"
+            nzType="inner"
+          >
+            <nz-form-item nzAlign="middle">
+              <nz-form-label nzFor="content" nzSpan="6" nzRequired="true">
+                Question content</nz-form-label
+              >
+              <nz-form-control [nzSpan]="14">
+                <textarea
+                  nz-input
+                  formControlName="content"
+                  id="content"
+                  name="content"
+                  [nzAutosize]="true"
+                  placeholder="Please enter a question"
+                ></textarea>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nzAlign="middle">
+              <nz-form-label nzRequired nzSpan="6" nzFor="type">
+                Type
+              </nz-form-label>
+              <nz-form-control nzSpan="14">
+                <nz-select
+                  formControlName="type"
+                  name="type"
+                  style="width: 100%;"
+                >
+                  <nz-option
+                    [nzValue]="types.TrueFalse"
+                    [nzLabel]="'True or False'"
+                  ></nz-option>
+                  <nz-option
+                    [nzValue]="types.Opts"
+                    [nzLabel]="'Multiple Choice'"
+                  ></nz-option>
+                  <nz-option
+                    [nzValue]="types.Mopts"
+                    [nzLabel]="'Multiple Choice 2'"
+                  >
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nzAlign="middle">
+              <nz-form-label nzFor="points" nzSpan="6" nzRequired="true">
+                Points</nz-form-label
+              ><nz-form-control nzSpan="8">
+                <nz-input-number
+                  formControlName="points"
+                  name="points"
+                  id="points"
+                ></nz-input-number>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-divider
+              nzText="Options"
+              nzType="horizontal"
+              nzOrientation="left"
+              style="min-width: 60%; width: 60%; translate: 40%;"
+            ></nz-divider>
+            <nz-form-item>
+              <nz-form-control nzSpan="18" nzOffset="6">
+                <nz-radio-group formControlName="answer">
+                  <div formArrayName="options">
+                    <div
+                      *ngFor="
+                        let option of getQuestionOptions(i).controls;
+                        let j = index
+                      "
+                      [formGroupName]="j"
+                      style="display: flex; flex-direction: row; margin: 5px;"
+                    >
+                      <label
+                        nz-radio
+                        [nzValue]="j"
+                        style="width: 40px; margin: 0px; padding: 0px;"
+                      ></label>
+                      <input
+                        nz-input
+                        formControlName="content"
+                        id="content"
+                        name="content"
+                        placeholder=""
+                        style="min-width: 400px;"
+                      />
+                      <button
+                        nz-button
+                        nzType="dashed"
+                        style="margin-left: 5px;"
+                        nzShape="circle"
+                        type="button"
+                      >
+                        <i nz-icon nzType="delete"></i>
+                      </button>
+                    </div>
+                    <button
+                      nz-button
+                      nzBlock="true"
+                      (click)="addOption(i)"
+                      nzType="dashed"
+                      [disabled]="
+                        questionForms.at(i).get('type').value ===
+                        types.TrueFalse
+                      "
+                    >
+                      <i nz-icon nzType="plus"></i>
+                    </button>
+                  </div>
+                </nz-radio-group>
+              </nz-form-control>
+            </nz-form-item>
+          </nz-card>
+        </nz-space-item>
+        <ng-template #delete>
+          <button nz-button nzType="primary" nzShape="circle">
+            <i nz-icon nzTheme="outline" nzType="delete"></i>
+          </button>
+        </ng-template>
+      </nz-space>
+    </div>
+    <!-- Barra para crear una nueva pregunta. -->
+    <div class="question-generator">
+      {{ print() }}
+      <form
+        nz-form
+        nzLayout="inline"
+        [formGroup]="newQuestions"
+        style="justify-content: center; align-items: center;"
+      >
+        <nz-form-item nzAlign="middle">
+          <nz-form-label nzFor="type"> Type </nz-form-label>
+          <nz-form-control>
+            <nz-select
+              formControlName="QType"
+              name="type"
+              style="width: 150px;"
+            >
+              <nz-option
+                [nzValue]="types.TrueFalse"
+                [nzLabel]="'True or False'"
+              ></nz-option>
+              <nz-option
+                [nzValue]="types.Opts"
+                [nzLabel]="'Multiple Choice'"
+              ></nz-option>
+              <nz-option
+                [nzValue]="types.Mopts"
+                [nzLabel]="'Multiple Choice 2'"
+              >
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzFor="QOptions">Number of Options</nz-form-label>
+          <nz-form-control [nzErrorTip]="NewOptionError">
+            <nz-input-number
+              formControlName="QOptions"
+              name="Options"
+              id="QOptions"
+              [nzMin]="2"
+              [nzMax]="5"
+            ></nz-input-number>
+            <ng-template #NewOptionError let-control>
+              <ng-container *ngIf="control.hasError('min')">
+                The lowest option number is 2.
+              </ng-container>
+              <ng-container *ngIf="control.hasError('max')">
+                The max option number is 5.
+              </ng-container>
+              <ng-container *ngIf="control.hasError('required')">
+                Please enter a value.
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzFor="QPoints">Points</nz-form-label>
+          <nz-form-control [nzErrorTip]="NewPointsErrors">
+            <nz-input-number
+              formControlName="QPoints"
+              name="QPoints"
+              id="QPoints"
+              [nzMin]="1"
+              [nzMax]="100"
+            ></nz-input-number>
+            <ng-template #NewPointsErrors let-control>
+              <ng-container *ngIf="control.hasError('min')">
+                The lowest score posible is 1.
+              </ng-container>
+              <ng-container *ngIf="control.hasError('max')">
+                The highest score posible is 100.
+              </ng-container>
+              <ng-container *ngIf="control.hasError('required')">
+                Please enter a value.
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <button
+          nz-button
+          nzType="primary"
+          nzShape="round"
+          (click)="addQuestion()"
+        >
+          Create Question
+        </button>
+      </form>
+    </div>
+  </form>
+</div>

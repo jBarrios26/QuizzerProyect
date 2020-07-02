@@ -1,0 +1,30 @@
+<nz-layout style="min-height: 100vh;">
+  <nz-header>
+    <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+      <div class="logo">
+        <i nz-icon [nzType]="'left'"></i> Quizzer
+        <i nz-icon [nzType]="'right'"></i>
+      </div>
+      <div>
+        <ul nz-menu nzTheme="dark" nzMode="horizontal">
+          <li nz-menu-item nz-typography class="menu-item">
+            Register
+          </li>
+          <li class="menu-item" nz-menu-item nz-typography>Login</li>
+          <li
+            class="menu-item"
+            nz-menu-item
+            nz-typography
+            (click)="goto('create')"
+          >
+            Create Quiz
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nz-header>
+  <nz-content nzThme="dark" class="content"
+    ><router-outlet></router-outlet
+  ></nz-content>
+  <nz-footer>Derechos reservados</nz-footer>
+</nz-layout>

@@ -1,0 +1,24 @@
+.logo {
+  font-size: 20px;
+  color: white;
+  align-self: center;
+}
+
+.content-style {
+  overflow: auto;
+}
+
+nz-footer {
+  text-align: center;
+}
+
+.content {
+  padding: 12px;
+  margin: 8px;
+  height: auto;
+  background-color: #141414;
+}
+
+.menu-item {
+  font-size: 18px;
+}

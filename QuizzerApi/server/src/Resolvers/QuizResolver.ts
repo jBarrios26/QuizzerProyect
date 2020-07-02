@@ -43,10 +43,10 @@ export class QuizResolver {
         question.numOfOptions = x.numOptions;
         question.type = x.type;
         question.points = x.points;
-        question.options = x.options.map((x) => {
+        question.options = x.options.map((x, index) => {
           let qoption = new Option();
           qoption.content = x.content;
-          qoption.answer = x.answer;
+          qoption.relativeid = index + 1;
           return qoption;
         });
         return question;
@@ -69,7 +69,7 @@ export class QuizResolver {
       throw new ApolloError("Quiz not found");
     }
     const score = quiz.questions.reduce((accumulator, question) => {
-      const correctAnswers = question.options.filter((x) => x.answer);
+      const correctAnswers = question.options.filter((x) => x.relativeid);
       const selected = answers.answers.find(
         (x) => x.questionid === question.id
       )!.selected;
