@@ -7,4 +7,3 @@ export class Quiz {
   numOfQuestions?: number;
   questions: Question[];
 }
-

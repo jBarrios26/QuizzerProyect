@@ -5,24 +5,24 @@ import { OptionInput } from './OptionInput';
 
 @InputType()
 export class QuestionInput {
-  @Field(() => Int)
-  relativeid: number;
+	@Field(() => Int)
+	relativeid: number;
 
-  @Field(() => String)
-  content: string;
+	@Field(() => String)
+	content: string;
 
-  @Field(() => Int)
-  numOptions: number;
+	@Field(() => Int)
+	numOptions: number;
 
-  @Field(() => Int)
-  points: number;
+	@Field(() => Int)
+	points: number;
 
-  @Field(() => Int)
-  answer: number[];
+	@Field(() => Int)
+	answer: number;
 
-  @Field(() => QuestionType)
-  type: QuestionType;
+	@Field(() => QuestionType)
+	type: QuestionType;
 
-  @Field(() => [OptionInput])
-  options: OptionInput[];
+	@Field(() => [OptionInput])
+	options: OptionInput[];
 }

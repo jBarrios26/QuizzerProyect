@@ -3,13 +3,19 @@
     <u>Create Quiz</u><i nz-icon nzType="form"></i>
   </h1>
   <nz-divider nzText="Information" nzOrientation="left"></nz-divider>
-  <form nz-form nzLayout="horizontal" [formGroup]="quiz">
+  <form nz-form nzLayout="horizontal" [formGroup]="quiz" (ngSubmit)="submit()">
     <nz-form-item nzAlign="middle">
       <nz-form-label nzSpan="6" nzRequired nzFor="theme">Theme</nz-form-label>
-      <nz-form-control nzSpan="14">
+      <nz-form-control nzSpan="14" [nzErrorTip]="errorTheme">
         <input nz-input formControlName="theme" id="theme" name="theme" />
+        <ng-template #errorTheme let-control>
+          <ng-container *ngIf="control.hasError('required')">
+            Please enter a theme.
+          </ng-container>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
+
     <nz-form-item nzAlign="middle">
       <nz-form-label nzSpan="6" nzFor="author" nzRequired="true"
         >Author</nz-form-label
@@ -18,11 +24,12 @@
         <input nz-input formControlName="author" id="author" name="author" />
       </nz-form-control>
     </nz-form-item>
+
     <nz-form-item nzAlign="middle">
       <nz-form-label nzSpan="6" nzFor="Nquestions" nzRequired="true"
         >Number of Questions</nz-form-label
       >
-      <nz-form-control nzSpan="4">
+      <nz-form-control nzSpan="4" [nzErrorTip]="numQuestionError">
         <nz-input-number
           [nzMax]="15"
           [nzMin]="1"
@@ -30,8 +37,20 @@
           id="Nquestions"
           name="Nquestions"
         ></nz-input-number>
+        <ng-template #numQuestionError let-control>
+          <ng-container *ngIf="control.hasError('required')">
+            Please enter how many questions do you want.
+          </ng-container>
+
+          <ng-container
+            *ngIf="control.hasError('min') || control.hasError('max')"
+          >
+            Please enter a valid number of questions
+          </ng-container>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
+
     <!--Area para desplegar las  preguntas.-->
     <nz-divider nzText="Questions" nzOrientation="left"></nz-divider>
     <div formArrayName="questions" style="margin: 0px 12px 0px 12px;">
@@ -50,7 +69,10 @@
               <nz-form-label nzFor="content" nzSpan="6" nzRequired="true">
                 Question content</nz-form-label
               >
-              <nz-form-control [nzSpan]="14">
+              <nz-form-control
+                [nzSpan]="14"
+                [nzErrorTip]="'Please enter a question'"
+              >
                 <textarea
                   nz-input
                   formControlName="content"
@@ -59,6 +81,11 @@
                   [nzAutosize]="true"
                   placeholder="Please enter a question"
                 ></textarea>
+                <ng-template #contentQError let-control>
+                  <ng-container *ngIf="control.hasError('required')">
+                    Please enter a question.
+                  </ng-container>
+                </ng-template>
               </nz-form-control>
             </nz-form-item>
             <nz-form-item nzAlign="middle">
@@ -71,10 +98,6 @@
                   name="type"
                   style="width: 100%;"
                 >
-                  <nz-option
-                    [nzValue]="types.TrueFalse"
-                    [nzLabel]="'True or False'"
-                  ></nz-option>
                   <nz-option
                     [nzValue]="types.Opts"
                     [nzLabel]="'Multiple Choice'"
@@ -90,12 +113,24 @@
             <nz-form-item nzAlign="middle">
               <nz-form-label nzFor="points" nzSpan="6" nzRequired="true">
                 Points</nz-form-label
-              ><nz-form-control nzSpan="8">
+              ><nz-form-control nzSpan="8" [nzErrorTip]="scoreError">
                 <nz-input-number
+                  nzMin="1"
+                  nzMax="100"
                   formControlName="points"
                   name="points"
                   id="points"
                 ></nz-input-number>
+                <ng-template #scoreError let-control>
+                  <ng-container *ngIf="control.hasError('required')">
+                    Please enter a value.
+                  </ng-container>
+                  <ng-container
+                    *ngIf="control.hasError('min') || control.hasError('max')"
+                  >
+                    Please enter a valid score.
+                  </ng-container>
+                </ng-template>
               </nz-form-control>
             </nz-form-item>
             <nz-divider
@@ -121,26 +156,38 @@
                         [nzValue]="j"
                         style="width: 40px; margin: 0px; padding: 0px;"
                       ></label>
-                      <input
-                        nz-input
-                        formControlName="content"
-                        id="content"
-                        name="content"
-                        placeholder=""
-                        style="min-width: 400px;"
-                      />
-                      <button
-                        nz-button
-                        nzType="dashed"
-                        style="margin-left: 5px;"
-                        nzShape="circle"
-                        type="button"
-                      >
-                        <i nz-icon nzType="delete"></i>
-                      </button>
+                      <nz-form-item>
+                        <nz-form-control
+                          nzErrorTip="Please enter an option"
+                          nzSpan="24"
+                          style="display: inline-flex;"
+                        >
+                          <input
+                            nz-input
+                            formControlName="content"
+                            id="content"
+                            name="content"
+                            placeholder=""
+                            style="min-width: 400px;"
+                          />
+                        </nz-form-control>
+                        <button
+                          *ngIf="checkDeleteOption(i, j)"
+                          nz-button
+                          nzType="dashed"
+                          style="margin-left: 5px;"
+                          nzShape="circle"
+                          type="button"
+                          (click)="removeOption(i, j)"
+                        >
+                          <i nz-icon nzType="delete"></i>
+                        </button>
+                      </nz-form-item>
                     </div>
                     <button
+                      *ngIf="getQuestionOptions(i).length < 5"
                       nz-button
+                      type="button"
                       nzBlock="true"
                       (click)="addOption(i)"
                       nzType="dashed"
@@ -156,17 +203,24 @@
               </nz-form-control>
             </nz-form-item>
           </nz-card>
+          <ng-template #delete>
+            <button
+              nz-button
+              nzType="primary"
+              nzShape="circle"
+              (click)="deleteQuestion(i)"
+            >
+              <i nz-icon nzTheme="outline" nzType="delete"></i>
+            </button>
+          </ng-template>
         </nz-space-item>
-        <ng-template #delete>
-          <button nz-button nzType="primary" nzShape="circle">
-            <i nz-icon nzTheme="outline" nzType="delete"></i>
-          </button>
-        </ng-template>
       </nz-space>
     </div>
     <!-- Barra para crear una nueva pregunta. -->
-    <div class="question-generator">
-      {{ print() }}
+    <div
+      class="question-generator"
+      *ngIf="this.numQuestions < this.quiz.get('numOfQuestions').value"
+    >
       <form
         nz-form
         nzLayout="inline"
@@ -181,10 +235,6 @@
               name="type"
               style="width: 150px;"
             >
-              <nz-option
-                [nzValue]="types.TrueFalse"
-                [nzLabel]="'True or False'"
-              ></nz-option>
               <nz-option
                 [nzValue]="types.Opts"
                 [nzLabel]="'Multiple Choice'"
@@ -209,7 +259,7 @@
             ></nz-input-number>
             <ng-template #NewOptionError let-control>
               <ng-container *ngIf="control.hasError('min')">
-                The lowest option number is 2.
+                The lowest option number is 1.
               </ng-container>
               <ng-container *ngIf="control.hasError('max')">
                 The max option number is 5.
@@ -253,5 +303,12 @@
         </button>
       </form>
     </div>
+    <nz-form-item>
+      <nz-form-control nzSpan="1-24">
+        <button nz-button [nzType]="'primary'" nzBlock="true" nzShape="round">
+          Submit
+        </button>
+      </nz-form-control>
+    </nz-form-item>
   </form>
 </div>

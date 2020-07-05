@@ -36,8 +36,8 @@ export type Quiz = {
   theme: Scalars['String'];
   numberOfQuestions: Scalars['Int'];
   user: User;
-  questions: Array<Question>;
-  results: Array<Results>;
+  questions: Question;
+  results: Results;
 };
 
 export type User = {
@@ -55,14 +55,15 @@ export type Question = {
   content: Scalars['String'];
   points: Scalars['Int'];
   numOfOptions: Scalars['Int'];
+  answer: Array<Scalars['Int']>;
   quiz: Quiz;
   options: Array<Option>;
 };
 
 export type Option = {
   __typename?: 'Option';
+  relativeid: Scalars['Int'];
   content: Scalars['String'];
-  answer: Scalars['String'];
   question: Question;
 };
 
@@ -72,8 +73,8 @@ export type Results = {
   quizId: Scalars['Int'];
   score: Scalars['Int'];
   done: Scalars['DateTime'];
-  user: Array<User>;
-  quiz: Array<Quiz>;
+  user: User;
+  quiz: Quiz;
 };
 
 
@@ -135,6 +136,7 @@ export type QuestionInput = {
   content: Scalars['String'];
   numOptions: Scalars['Int'];
   points: Scalars['Int'];
+  answer: Scalars['Int'];
   type: QuestionType;
   options: Array<OptionInput>;
 };
@@ -148,7 +150,6 @@ export enum QuestionType {
 
 export type OptionInput = {
   content: Scalars['String'];
-  answer: Scalars['Boolean'];
 };
 
 export type GradingInput = {
@@ -190,6 +191,16 @@ export type QuizListQuery = (
   )> }
 );
 
+export type CreateQuizMutationVariables = Exact<{
+  quiz: QuizInput;
+}>;
+
+
+export type CreateQuizMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'createQuiz'>
+);
+
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -216,6 +227,19 @@ export const QuizListDocument = gql`
   })
   export class QuizListGQL extends Apollo.Query<QuizListQuery, QuizListQueryVariables> {
     document = QuizListDocument;
+    
+  }
+export const CreateQuizDocument = gql`
+    mutation createQuiz($quiz: QuizInput!) {
+  createQuiz(quiz: $quiz)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateQuizGQL extends Apollo.Mutation<CreateQuizMutation, CreateQuizMutationVariables> {
+    document = CreateQuizDocument;
     
   }
 export const HelloDocument = gql`

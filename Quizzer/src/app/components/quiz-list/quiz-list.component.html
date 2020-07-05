@@ -1,4 +1,8 @@
-<nz-space nzSize="middle" nzDirection="vertical" style="width: 100%;">
+<nz-space
+  nzSize="middle"
+  nzDirection="vertical"
+  style="width: 100%; background-color: #2e2e2e; padding: 5px;"
+>
   <nz-space-item *ngFor="let item of items">
     <nz-card [nzActions]="[TakeExam]" nzBordered="true" nzSize="small">
       <nz-card-meta [nzTitle]="item.theme" nzDescription=""></nz-card-meta>

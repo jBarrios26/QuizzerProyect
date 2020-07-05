@@ -1,0 +1,3 @@
+mutation createQuiz($quiz: QuizInput!) {
+  createQuiz(quiz: $quiz)
+}
