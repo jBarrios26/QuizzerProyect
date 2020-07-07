@@ -13,9 +13,9 @@ nz-footer {
 }
 
 .content {
-  padding: 12px;
+  padding: 5px;
   margin: 8px;
-  height: auto;
+  height: border-box;
   background-color: #141414;
 }
 

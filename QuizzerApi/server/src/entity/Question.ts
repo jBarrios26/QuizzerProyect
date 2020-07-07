@@ -50,7 +50,7 @@ export class Question extends BaseEntity {
   numOfOptions: number;
 
   @Field(() => [Int])
-  @Column("int", { array: true })
+  @Column("simple-array")
   answer: number[];
 
   @Field(() => Quiz)

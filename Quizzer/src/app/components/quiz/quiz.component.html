@@ -1,0 +1,76 @@
+<div *ngIf="quiz">
+  <div class="title" fxLayout="column" fxLayoutAlign="space-evenly center">
+    <div>
+      <h2 nz-typography style="text-transform: capitalize;">
+        {{ quiz.theme }}
+      </h2>
+    </div>
+    <div
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+      class="description"
+    >
+      <div>
+        <h3><i nz-icon [nzType]="'user'"></i> {{ quiz.username }}</h3>
+      </div>
+      <div>
+        <h3>
+          <i nz-icon nzType="number"></i> {{ quiz.numOfQuestions }} Questions
+        </h3>
+      </div>
+    </div>
+  </div>
+  <nz-divider></nz-divider>
+  <div *ngIf="answer">
+    <form
+      nz-form
+      (ngSubmit)="submit()"
+      [formGroup]="answer"
+      formGroup="answer"
+      [nzLayout]="'horizontal'"
+    >
+      <div
+        class="questions"
+        fxLayout="column"
+        fxLayoutAlign="space-evenly center"
+        style="min-width: 66%;"
+      >
+        <nz-space formArrayName="questions" style="min-width: 66%;">
+          <nz-space-item
+            *ngFor="let question of questionArray.controls; let i = index"
+            [formGroupName]="i"
+            style="width: 100%;"
+          >
+            <nz-card class="">
+              <div class="subtitle">
+                {{ i + 1 }}. {{ this.quiz.questions[i].content }}
+              </div>
+              <nz-divider nzText="Options" nzOrientation="left"></nz-divider>
+              <nz-form-item>
+                <nz-form-control [nzSpan]="18" nzOffset="3">
+                  <nz-radio-group formControlName="answer" nzSize="large">
+                    <div
+                      *ngFor="
+                        let option of this.quiz.questions[i].options;
+                        let j = index
+                      "
+                    >
+                      <label nz-radio [nzValue]="option.id" class="option">{{
+                        option.content
+                      }}</label>
+                    </div>
+                  </nz-radio-group>
+                </nz-form-control>
+              </nz-form-item>
+            </nz-card>
+          </nz-space-item>
+        </nz-space>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="end center" class="submit-area">
+        <button nz-button nzSize="large" [nzType]="'primary'" type="submit">
+          Submit Test
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -3,8 +3,6 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 import { QuestionType } from '../../../generated/graphql';
-import { assert } from 'console';
-import { map } from 'rxjs/operators';
 import { Quiz } from 'src/app/models/quiz';
 import { Question } from 'src/app/models/question';
 import { Options } from '../../models/options';
@@ -148,6 +146,7 @@ export class CreateQuizComponent implements OnInit {
     const quiz = this.createQuiz();
     this.quizService.sendQuiz(quiz).subscribe((x) => {
       if (x.errors) {
+        console.log(x.errors);
         this.message.error('Something went wrong...');
       }
       if (x.data.createQuiz) {
@@ -175,10 +174,7 @@ export class CreateQuizComponent implements OnInit {
     const questions: Array<any> = this.questionForms.value;
     console.log(questions.length);
 
-    if (
-      questions.length !== this.quiz.get('numOfQuestions').value ||
-      questions === undefined
-    ) {
+    if (questions.length !== this.quiz.get('numOfQuestions').value) {
       this.message.error("The questions and number of questions don't match");
       return false;
     }
@@ -215,24 +211,25 @@ export class CreateQuizComponent implements OnInit {
     quiz.numOfQuestions = this.quiz.get('numOfQuestions').value;
     quiz.username = this.quiz.get('author').value;
     const questions: Array<any> = this.questionForms.controls;
-    const questionArray: Array<Question> = questions.map((x: FormGroup) => {
+    quiz.questions = questions.map((x: FormGroup) => {
       const question = new Question();
       question.content = x.get('content').value;
-      question.answer = x.get('answer').value;
+      question.answer = new Array<number>();
+      question.answer.push(x.get('answer').value);
+      console.log(x.get('answer').value);
+      console.log(JSON.stringify(question.answer, null, 3));
       question.relativeId = 1;
       question.points = x.get('points').value;
       question.type = x.get('type').value;
       question.numOfOptions = x.get('numOfOptions').value;
       const options = (x.get('options') as FormArray).controls;
-      const optionsArray: Array<Options> = options.map((y: FormGroup) => {
+      question.options = options.map((y: FormGroup) => {
         const option = new Options();
         option.content = y.get('content').value;
         return option;
       });
-      question.options = optionsArray;
       return question;
     });
-    quiz.questions = questionArray;
     return quiz;
   }
 }

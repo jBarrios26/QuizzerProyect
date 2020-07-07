@@ -1,5 +1,6 @@
 query takeQuiz($id: Int!) {
   getQuiz(id: $id) {
+    id
     theme
     user {
       name

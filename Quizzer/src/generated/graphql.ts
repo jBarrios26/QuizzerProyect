@@ -36,7 +36,7 @@ export type Quiz = {
   theme: Scalars['String'];
   numberOfQuestions: Scalars['Int'];
   user: User;
-  questions: Question;
+  questions: Array<Question>;
   results: Results;
 };
 
@@ -220,18 +220,18 @@ export type TakeQuizQuery = (
   { __typename?: 'Query' }
   & { getQuiz: (
     { __typename?: 'Quiz' }
-    & Pick<Quiz, 'theme' | 'numberOfQuestions'>
+    & Pick<Quiz, 'id' | 'theme' | 'numberOfQuestions'>
     & { user: (
       { __typename?: 'User' }
       & Pick<User, 'name'>
-    ), questions: (
+    ), questions: Array<(
       { __typename?: 'Question' }
-      & Pick<Question, 'id' | 'content' | 'points' | 'relativeID'>
+      & Pick<Question, 'id' | 'content' | 'points'>
       & { options: Array<(
         { __typename?: 'Option' }
         & Pick<Option, 'id' | 'content'>
       )> }
-    ) }
+    )> }
   ) }
 );
 
@@ -284,6 +284,7 @@ export const HelloDocument = gql`
 export const TakeQuizDocument = gql`
     query takeQuiz($id: Int!) {
   getQuiz(id: $id) {
+    id
     theme
     user {
       name
@@ -293,7 +294,6 @@ export const TakeQuizDocument = gql`
       id
       content
       points
-      relativeID
       options {
         id
         content

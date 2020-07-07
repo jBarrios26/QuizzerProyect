@@ -1,4 +1,4 @@
-import { registerLocaleData } from '@angular/common';
+import {} from '@angular/common/locales/en';
 import { HttpClientModule, HttpHeaders } from '@angular/common/http';
 import en from '@angular/common/locales/en';
 import { NgModule } from '@angular/core';
@@ -40,8 +40,6 @@ import { QuizListComponent } from './components/quiz-list/quiz-list.component';
 import { AuthService } from './service/auth.service';
 import { QuizComponent } from './components/quiz/quiz.component';
 
-registerLocaleData(en);
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -78,7 +76,7 @@ registerLocaleData(en);
     NzDividerModule,
     NzSelectModule,
     NzMessageModule,
-    NzRadioModule
+    NzRadioModule,
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent],

@@ -55,7 +55,7 @@ type Question {
 type Quiz {
   id: Int!
   numberOfQuestions: Int!
-  questions: Question!
+  questions: [Question!]!
   results: Results!
   theme: String!
   user: User!

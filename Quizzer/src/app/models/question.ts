@@ -7,7 +7,7 @@ export class Question {
   content: string;
   type: QuestionType;
   points?: number;
-  answer?: number;
+  answer?: number[];
   numOfOptions?: number;
   options: Options[];
 }

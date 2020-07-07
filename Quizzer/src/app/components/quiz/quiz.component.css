@@ -1,0 +1,28 @@
+.title{
+  align-items: center;
+}
+.description{
+  min-width: 250px;
+}
+
+.questions{
+  align-items: center;
+  justify-content: center;
+}
+
+.question{
+min-width: 66%;
+}
+
+.option{
+  font-size: 18px;
+}
+
+.subtitle{
+  font-size: 26px;
+}
+
+.submit-area{
+  margin:8px;
+  padding: 2px;
+}
