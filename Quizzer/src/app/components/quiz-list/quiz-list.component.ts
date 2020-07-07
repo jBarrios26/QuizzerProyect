@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 
 import { Quiz } from '../../models/quiz';
 import { DashboardService } from '../../service/dashboard.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-quiz-list',
@@ -12,24 +13,19 @@ import { DashboardService } from '../../service/dashboard.service';
 export class QuizListComponent implements OnInit, OnDestroy {
   quizSubscription: Subscription;
   items: Quiz[];
-  constructor(private dashboard: DashboardService) {}
+  constructor(private dashboard: DashboardService, private router: Router) {}
 
   ngOnInit(): void {
-    console.log('init');
-    console.log(
-      this.quizSubscription === undefined || this.quizSubscription.closed
-    );
     this.quizSubscription = this.dashboard.getQuizzes().subscribe((x) => {
-      console.log('fetching');
-      console.log(JSON.stringify(x, null, 3));
-
       this.items = x;
     });
   }
 
-  ngOnDestroy() {
-    console.log('destroy');
+  takeQuiz(id: number) {
+    this.router.navigate(['/quiz', id]);
+  }
 
+  ngOnDestroy() {
     this.quizSubscription.unsubscribe();
     console.log(this.quizSubscription.closed);
   }

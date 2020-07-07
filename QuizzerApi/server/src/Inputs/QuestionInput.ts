@@ -6,7 +6,7 @@ import { OptionInput } from './OptionInput';
 @InputType()
 export class QuestionInput {
 	@Field(() => Int)
-	relativeid: number;
+	relativeId: number;
 
 	@Field(() => String)
 	content: string;
@@ -17,8 +17,8 @@ export class QuestionInput {
 	@Field(() => Int)
 	points: number;
 
-	@Field(() => Int)
-	answer: number;
+	@Field(() => [Int])
+	answer: number[];
 
 	@Field(() => QuestionType)
 	type: QuestionType;

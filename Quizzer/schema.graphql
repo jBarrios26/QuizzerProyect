@@ -1,0 +1,127 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type LoginResponse {
+  accessToken: String!
+  user: User!
+}
+
+type Mutation {
+  createQuiz(quiz: QuizInput!): Boolean!
+  forgotPassword(username: String!): Boolean!
+  grading(answers: GradingInput!, user: String!): Boolean!
+  login(password: String!, username: String!): LoginResponse!
+  prueba(prueba: ArrayInputTest!): String!
+  register(
+    gender: String!
+    name: String!
+    password: String!
+    publisher: Boolean!
+    username: String!
+  ): Boolean!
+}
+
+type Option {
+  content: String!
+  id: Int!
+  question: Question!
+  relativeid: Int!
+}
+
+type Query {
+  bye: String!
+  getQuiz(id: Int!): Quiz!
+  getQuizzes: [Quiz!]!
+  hello: String!
+  users: [User!]!
+}
+
+type Question {
+  answer: [Int!]!
+  content: String!
+  id: Int!
+  numOfOptions: Int!
+  options: [Option!]!
+  points: Int!
+  quiz: Quiz!
+  relativeID: Int!
+  type: String!
+}
+
+type Quiz {
+  id: Int!
+  numberOfQuestions: Int!
+  questions: Question!
+  results: Results!
+  theme: String!
+  user: User!
+}
+
+type Results {
+  done: DateTime!
+  quiz: Quiz!
+  quizId: Int!
+  score: Int!
+  user: User!
+  userUsername: String!
+}
+
+type User {
+  gender: String!
+  name: String!
+  publisher: Boolean!
+  username: String!
+}
+
+"Describes the valid question types"
+enum QuestionType {
+  MOPTS
+  OPTS
+  TRUE_FALSE
+}
+
+input Answer {
+  questionid: Int!
+  selected: [Int!]!
+}
+
+input ArrayInputTest {
+  pruebaarr: [PruebaInput!]!
+}
+
+input GradingInput {
+  answers: [Answer!]!
+  quizid: Int!
+}
+
+input OptionInput {
+  content: String!
+}
+
+input PruebaInput {
+  theme: String!
+}
+
+input QuestionInput {
+  answer: [Int!]!
+  content: String!
+  numOptions: Int!
+  options: [OptionInput!]!
+  points: Int!
+  relativeId: Int!
+  type: QuestionType!
+}
+
+input QuizInput {
+  author: String!
+  numberOfQuestion: Int!
+  questions: [QuestionInput!]!
+  theme: String!
+}
+
+"The javascript `Date` as string. Type represents date and time as the ISO Date string."
+scalar DateTime

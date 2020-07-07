@@ -1,0 +1,18 @@
+query takeQuiz($id: Int!) {
+  getQuiz(id: $id) {
+    theme
+    user {
+      name
+    }
+    numberOfQuestions
+    questions {
+      id
+      content
+      points
+      options {
+        id
+        content
+      }
+    }
+  }
+}

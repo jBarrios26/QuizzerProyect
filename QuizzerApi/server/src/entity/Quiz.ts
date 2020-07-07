@@ -1,9 +1,16 @@
-import { Field, Int, ObjectType } from 'type-graphql';
-import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Field, Int, ObjectType } from "type-graphql";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 
-import { Question } from './Question';
-import { Results } from './Results';
-import { User } from './User';
+import { Question } from "./Question";
+import { Results } from "./Results";
+import { User } from "./User";
 
 @ObjectType()
 @Entity()
@@ -31,7 +38,7 @@ export class Quiz extends BaseEntity {
   })
   user: User;
 
-  @Field(() => Question)
+  @Field(() => [Question])
   @OneToMany(() => Question, (question) => question.quiz, {
     cascade: true,
     eager: true,

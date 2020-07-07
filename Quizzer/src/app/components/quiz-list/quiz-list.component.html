@@ -5,22 +5,29 @@
 >
   <nz-space-item *ngFor="let item of items">
     <nz-card [nzActions]="[TakeExam]" nzBordered="true" nzSize="small">
-      <nz-card-meta [nzTitle]="item.theme" nzDescription=""></nz-card-meta>
-      <div fxLayout="row" fxLayoutAlign="space-around end">
-        <div>
-          hi
+      <nz-card-meta [nzTitle]="title" [nzDescription]="desc"></nz-card-meta>
+      <ng-template #title>
+        <h2 nz-typography>{{ item.theme }}</h2>
+      </ng-template>
+      <ng-template #desc>
+        <div fxLayout="row" fxLayoutAlign="space-around end">
+          <div>
+            <h4 nz-typography>
+              <i nz-icon nzType="user"></i>{{ item.username }}
+            </h4>
+          </div>
+          <div>
+            <h4 nz-typography>
+              <i nz-icon nzType="number"></i>
+              {{ item.numOfQuestions }} preguntas
+            </h4>
+          </div>
         </div>
-        <div>
-          bye
-        </div>
-        <div>
-          he
-        </div>
-      </div>
+      </ng-template>
     </nz-card>
 
     <ng-template #TakeExam>
-      <a nz-button nzType="link" nzBlock="true">
+      <a nz-button nzType="link" nzBlock="true" (click)="takeQuiz(item.id)">
         Take Exam
       </a>
     </ng-template>

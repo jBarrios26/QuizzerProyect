@@ -27,7 +27,7 @@ export type Query = {
 
 
 export type QueryGetQuizArgs = {
-  id: Scalars['Float'];
+  id: Scalars['Int'];
 };
 
 export type Quiz = {
@@ -50,6 +50,7 @@ export type User = {
 
 export type Question = {
   __typename?: 'Question';
+  id: Scalars['Int'];
   relativeID: Scalars['Int'];
   type: Scalars['String'];
   content: Scalars['String'];
@@ -62,6 +63,7 @@ export type Question = {
 
 export type Option = {
   __typename?: 'Option';
+  id: Scalars['Int'];
   relativeid: Scalars['Int'];
   content: Scalars['String'];
   question: Question;
@@ -132,11 +134,11 @@ export type QuizInput = {
 };
 
 export type QuestionInput = {
-  relativeid: Scalars['Int'];
+  relativeId: Scalars['Int'];
   content: Scalars['String'];
   numOptions: Scalars['Int'];
   points: Scalars['Int'];
-  answer: Scalars['Int'];
+  answer: Array<Scalars['Int']>;
   type: QuestionType;
   options: Array<OptionInput>;
 };
@@ -209,6 +211,30 @@ export type HelloQuery = (
   & Pick<Query, 'hello'>
 );
 
+export type TakeQuizQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type TakeQuizQuery = (
+  { __typename?: 'Query' }
+  & { getQuiz: (
+    { __typename?: 'Quiz' }
+    & Pick<Quiz, 'theme' | 'numberOfQuestions'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'name'>
+    ), questions: (
+      { __typename?: 'Question' }
+      & Pick<Question, 'id' | 'content' | 'points' | 'relativeID'>
+      & { options: Array<(
+        { __typename?: 'Option' }
+        & Pick<Option, 'id' | 'content'>
+      )> }
+    ) }
+  ) }
+);
+
 export const QuizListDocument = gql`
     query QuizList {
   getQuizzes {
@@ -253,5 +279,34 @@ export const HelloDocument = gql`
   })
   export class HelloGQL extends Apollo.Query<HelloQuery, HelloQueryVariables> {
     document = HelloDocument;
+    
+  }
+export const TakeQuizDocument = gql`
+    query takeQuiz($id: Int!) {
+  getQuiz(id: $id) {
+    theme
+    user {
+      name
+    }
+    numberOfQuestions
+    questions {
+      id
+      content
+      points
+      relativeID
+      options {
+        id
+        content
+      }
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class TakeQuizGQL extends Apollo.Query<TakeQuizQuery, TakeQuizQueryVariables> {
+    document = TakeQuizDocument;
     
   }

@@ -38,6 +38,7 @@ import { LeaderboardComponent } from './components/leaderboard/leaderboard.compo
 import { LoginComponent } from './components/login/login.component';
 import { QuizListComponent } from './components/quiz-list/quiz-list.component';
 import { AuthService } from './service/auth.service';
+import { QuizComponent } from './components/quiz/quiz.component';
 
 registerLocaleData(en);
 
@@ -50,6 +51,7 @@ registerLocaleData(en);
     QuizListComponent,
     LeaderboardComponent,
     CreateQuizComponent,
+    QuizComponent,
   ],
   imports: [
     BrowserModule,
