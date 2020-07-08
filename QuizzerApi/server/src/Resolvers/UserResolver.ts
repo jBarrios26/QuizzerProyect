@@ -85,7 +85,6 @@ export class UserResolver {
 
     res.cookie("jid", refreshAccessToken(user), {
       httpOnly: true,
-      maxAge: 90000000,
     });
 
     return {
