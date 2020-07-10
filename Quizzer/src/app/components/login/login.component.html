@@ -1,1 +1,59 @@
-<p>login works!</p>
+<div nz-row style="margin-top: 5%;">
+  <div nz-col nzSpan="9" nzOffset="7">
+    <nz-card>
+      <div fxLayout="column" fxLayoutAlign="space-evenly center">
+        <div>
+          <h1><i nz-icon nzType="user"></i></h1>
+        </div>
+      </div>
+      <div fxLayout="column" fxLayoutAlign="center">
+        <form nz-form [formGroup]="loginForm" (ngSubmit)="login()">
+          <nz-form-item>
+            <nz-form-label nzFor="username" nzSpan="4">Username</nz-form-label>
+            <nz-form-control nzSpan="18">
+              <nz-input-group nzSuffixIcon="user">
+                <input
+                  nz-input
+                  name="username"
+                  id="username"
+                  formControlName="username"
+                />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label nzFor="password" nzSpan="4">Password</nz-form-label>
+            <nz-form-control nzSpan="18">
+              <nz-input-group [nzSuffix]="passwordIcon">
+                <input
+                  nz-input
+                  name="password"
+                  id="password"
+                  formControlName="password"
+                />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-control nzSpan="8" nzOffset="4">
+              <button nz-button type="submit" nzType="primary" nzBlock>
+                Login <i nz-icon nzType="login"></i>
+              </button>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+      </div>
+    </nz-card>
+  </div>
+</div>
+
+<ng-template #avatar>
+  <i nz-icon nzType="user"> </i>
+</ng-template>
+<ng-template #passwordIcon>
+  <i
+    nz-icon
+    [nzType]="passwordVisible ? 'lock' : 'eye'"
+    (click)="this.passwordVisible = !this.passwordVisible"
+  ></i>
+</ng-template>

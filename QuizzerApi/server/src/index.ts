@@ -1,18 +1,18 @@
-import 'dotenv/config';
-import 'reflect-metadata';
+import "dotenv/config";
+import "reflect-metadata";
 
-import { ApolloServer } from 'apollo-server-express';
-import cookieParser from 'cookie-parser';
-import cors from 'cors';
-import express from 'express';
-import { verify } from 'jsonwebtoken';
-import { buildSchema } from 'type-graphql';
-import { createConnection } from 'typeorm';
+import { ApolloServer } from "apollo-server-express";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import express from "express";
+import { verify } from "jsonwebtoken";
+import { buildSchema } from "type-graphql";
+import { createConnection } from "typeorm";
 
-import { User } from './entity/User';
-import { QuizResolver } from './Resolvers/QuizResolver';
-import { UserResolver } from './Resolvers/UserResolver';
-import { createAccessToken, refreshAccessToken } from './Utilities/auth';
+import { User } from "./entity/User";
+import { QuizResolver } from "./Resolvers/QuizResolver";
+import { UserResolver } from "./Resolvers/UserResolver";
+import { createAccessToken, refreshAccessToken } from "./Utilities/auth";
 
 (async () => {
   await createConnection();
@@ -48,7 +48,15 @@ import { createAccessToken, refreshAccessToken } from './Utilities/auth';
     }
 
     res.cookie("jid", refreshAccessToken(user), { httpOnly: true });
-    return res.send({ ok: true, accessToken: createAccessToken(user) });
+    return res.send({
+      ok: true,
+      accessToken: createAccessToken(user),
+      payload: {
+        username: user.username,
+        name: user.name,
+        publisher: user.publisher,
+      },
+    });
   });
 
   const apollo = new ApolloServer({

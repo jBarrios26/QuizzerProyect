@@ -1,0 +1,84 @@
+<div nz-row nzAlign="middle" style="margin-top: 5%;">
+  <div nz-col nzSpan="5"></div>
+  <div nz-col nzSpan="14">
+    <nz-card style="width: auto;">
+      <nz-card-meta [nzTitle]="titleTem"></nz-card-meta>
+      <form
+        nz-form
+        nzLayout="horizontal"
+        class="form-container"
+        [formGroup]="registerForm"
+        (ngSubmit)="submit()"
+      >
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5" nzFor="username"> Username</nz-form-label>
+          <nz-form-control nzSpan="12" [nzErrorTip]="userError">
+            <nz-input-group nzSuffixIcon="user">
+              <input
+                nz-input
+                name="username"
+                id="username"
+                formControlName="username"
+              />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nzJustify="start">
+          <nz-form-label nzSpan="5" nzFor="name">Name</nz-form-label>
+          <nz-form-control nzSpan="12" nzErrorTip="Please enter your name">
+            <nz-input-group nzSuffixIcon="smile">
+              <input nz-input name="name" id="name" formControlName="name" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzSpan="5" nzFor="password">Password</nz-form-label>
+          <nz-form-control nzSpan="12" [nzErrorTip]="passError">
+            <nz-input-group [nzSuffix]="passwordIcon">
+              <input
+                nz-input
+                name="password"
+                id="password"
+                [type]="passwordVisible ? 'text' : 'password'"
+                formControlName="password"
+            /></nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzSpan="5" nzFor="gender"> Gender</nz-form-label>
+          <nz-form-control nzSpan="12">
+            <nz-radio-group formControlName="gender">
+              <label nz-radio [nzValue]="'M'">Male</label>
+              <label nz-radio [nzValue]="'F'">Female</label>
+            </nz-radio-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control nzSpan="6" nzOffset="11" style="align-items: end;">
+            <button nz-button nzType="primary" type="submit">Register</button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </nz-card>
+  </div>
+  <div nz-col nzSpan="5"></div>
+</div>
+
+<ng-template #titleTem>
+  <h2 nz-typography><i nz-icon nzType="user-add"> </i>Register</h2>
+</ng-template>
+<ng-template #passwordIcon>
+  <i
+    nz-icon
+    [nzType]="passwordVisible ? 'lock' : 'eye'"
+    (click)="this.passwordVisible = !this.passwordVisible"
+  ></i>
+</ng-template>
+
+<ng-template #userError>
+  {{ getUserError() }}
+</ng-template>
+
+<ng-template #passError>
+  {{ getPasswordError() }}
+</ng-template>

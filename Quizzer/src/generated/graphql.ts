@@ -211,6 +211,38 @@ export type HelloQuery = (
   & Pick<Query, 'hello'>
 );
 
+export type LoginMutationVariables = Exact<{
+  user: Scalars['String'];
+  pass: Scalars['String'];
+}>;
+
+
+export type LoginMutation = (
+  { __typename?: 'Mutation' }
+  & { login: (
+    { __typename?: 'LoginResponse' }
+    & Pick<LoginResponse, 'accessToken'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'username' | 'name' | 'publisher'>
+    ) }
+  ) }
+);
+
+export type RegisterUserMutationVariables = Exact<{
+  user: Scalars['String'];
+  name: Scalars['String'];
+  password: Scalars['String'];
+  publisher: Scalars['Boolean'];
+  gender: Scalars['String'];
+}>;
+
+
+export type RegisterUserMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'register'>
+);
+
 export type TakeQuizQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -279,6 +311,39 @@ export const HelloDocument = gql`
   })
   export class HelloGQL extends Apollo.Query<HelloQuery, HelloQueryVariables> {
     document = HelloDocument;
+    
+  }
+export const LoginDocument = gql`
+    mutation login($user: String!, $pass: String!) {
+  login(username: $user, password: $pass) {
+    accessToken
+    user {
+      username
+      name
+      publisher
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class LoginGQL extends Apollo.Mutation<LoginMutation, LoginMutationVariables> {
+    document = LoginDocument;
+    
+  }
+export const RegisterUserDocument = gql`
+    mutation RegisterUser($user: String!, $name: String!, $password: String!, $publisher: Boolean!, $gender: String!) {
+  register(name: $name, username: $user, password: $password, publisher: $publisher, gender: $gender)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class RegisterUserGQL extends Apollo.Mutation<RegisterUserMutation, RegisterUserMutationVariables> {
+    document = RegisterUserDocument;
     
   }
 export const TakeQuizDocument = gql`

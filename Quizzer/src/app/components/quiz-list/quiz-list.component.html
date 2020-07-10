@@ -1,7 +1,13 @@
 <nz-space
   nzSize="middle"
   nzDirection="vertical"
-  style="width: 100%; background-color: #2e2e2e; padding: 5px;"
+  style="
+    display: flex;
+    height: 100%;
+    width: 100%;
+    background-color: #2e2e2e;
+    padding: 5px;
+  "
 >
   <nz-space-item *ngFor="let item of items">
     <nz-card [nzActions]="[TakeExam]" nzBordered="true" nzSize="small">

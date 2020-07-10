@@ -1,7 +1,9 @@
-import {} from '@angular/common/locales/en';
-import { HttpClientModule, HttpHeaders } from '@angular/common/http';
-import en from '@angular/common/locales/en';
-import { NgModule } from '@angular/core';
+import {
+  HttpClient,
+  HttpClientModule,
+  HttpHeaders,
+} from '@angular/common/http';
+import { NgModule, OnInit } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -9,7 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Apollo, ApolloModule } from 'apollo-angular';
 import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import { ApolloLink, from } from 'apollo-link';
+import { ApolloLink, Observable } from 'apollo-link';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
@@ -37,8 +39,11 @@ import { LayoutComponent } from './components/layout/layout.component';
 import { LeaderboardComponent } from './components/leaderboard/leaderboard.component';
 import { LoginComponent } from './components/login/login.component';
 import { QuizListComponent } from './components/quiz-list/quiz-list.component';
-import { AuthService } from './service/auth.service';
+import { AuthService, RefreshToken } from './service/auth.service';
 import { QuizComponent } from './components/quiz/quiz.component';
+import { RegisterComponent } from './components/register/register.component';
+import { TokenRefreshLink } from 'apollo-link-token-refresh';
+import jwtDecode from 'jwt-decode';
 
 @NgModule({
   declarations: [
@@ -50,6 +55,7 @@ import { QuizComponent } from './components/quiz/quiz.component';
     LeaderboardComponent,
     CreateQuizComponent,
     QuizComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
@@ -81,23 +87,91 @@ import { QuizComponent } from './components/quiz/quiz.component';
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-  constructor(apollo: Apollo, httpLink: HttpLink, auth: AuthService) {
+export class AppModule implements OnInit {
+  constructor(
+    apollo: Apollo,
+    httpLink: HttpLink,
+    auth: AuthService,
+    httpClient: HttpClient
+  ) {
     const http = httpLink.create({
       uri: environment.uriGraphql,
       withCredentials: true,
       method: 'POST',
     });
 
-    const authMiddleware = new ApolloLink((operation, forward) => {
-      operation.setContext({
-        headers: new HttpHeaders().set('Authorization', auth.getAccessToken),
-      });
-      return forward(operation);
-    });
+    const requestLink = new ApolloLink(
+      (operation, forward) =>
+        new Observable((observer) => {
+          let handle;
+          Promise.resolve(operation)
+            .then((operation) => {
+              operation.setContext({
+                headers: new HttpHeaders().set(
+                  'Authorization',
+                  'bearer ' + auth.getAccessToken
+                ),
+              });
+              return forward(operation);
+            })
+            .then(() => {
+              handle = forward(operation).subscribe({
+                next: observer.next.bind(observer),
+                error: observer.error.bind(observer),
+                complete: observer.complete.bind(observer),
+              });
+            })
+            .catch(observer.error.bind(observer));
+
+          return () => {
+            if (handle) handle.unsubscribe();
+          };
+        })
+    );
     const caches = new InMemoryCache();
 
-    apollo.create({ link: from([authMiddleware, http]), cache: caches });
-    console.log('sucessful');
+    apollo.create({
+      link: ApolloLink.from([
+        new TokenRefreshLink({
+          accessTokenField: 'accessToken',
+          isTokenValidOrUndefined: () => {
+            const token = auth.getAccessToken;
+
+            if (!token) {
+              return true;
+            }
+
+            try {
+              const { exp } = jwtDecode(token);
+              if (Date.now() >= exp * 1000) {
+                return false;
+              } else {
+                return true;
+              }
+            } catch {
+              return false;
+            }
+          },
+          fetchAccessToken: () => {
+            return fetch('http://localhost:4000/refresh_token', {
+              method: 'POST',
+              credentials: 'include',
+            });
+          },
+          handleFetch: (accessToken) => {
+            auth.setAccessToken = accessToken;
+          },
+          handleError: (err) => {
+            console.warn('Your refresh token is invalid. Try to relogin');
+            console.error(err);
+          },
+        }),
+        requestLink,
+        http,
+      ]),
+      cache: caches,
+    });
+    console.log('sucessful1');
   }
+  ngOnInit() {}
 }

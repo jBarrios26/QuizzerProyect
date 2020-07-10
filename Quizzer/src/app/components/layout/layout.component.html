@@ -10,7 +10,14 @@
           <li nz-menu-item nz-typography class="menu-item">
             Register
           </li>
-          <li class="menu-item" nz-menu-item nz-typography>Login</li>
+          <li
+            class="menu-item"
+            nz-menu-item
+            nz-typography
+            (click)="goto('login')"
+          >
+            Login
+          </li>
           <li
             class="menu-item"
             nz-menu-item

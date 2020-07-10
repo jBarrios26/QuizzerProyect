@@ -15,8 +15,10 @@ nz-footer {
 .content {
   padding: 5px;
   margin: 8px;
-  height: border-box;
+  height:100%;
+  width: 100%;
   background-color: #141414;
+
 }
 
 .menu-item {

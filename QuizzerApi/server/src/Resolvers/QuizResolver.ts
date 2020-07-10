@@ -40,7 +40,6 @@ export class QuizResolver {
   }
 
   @Mutation(() => Boolean)
-  @UseMiddleware(isAuth)
   async createQuiz(@Arg("quiz") quiz: QuizInput): Promise<Boolean> {
     console.log(JSON.stringify(quiz));
     try {

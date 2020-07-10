@@ -11,7 +11,7 @@ export const createAccessToken = (user: User) => {
       publish: user.publisher,
     },
     process.env.ACCESS_TOKEN_SECRET!,
-    { expiresIn: "15m" }
+    { expiresIn: "15s" }
   );
 };
 
@@ -23,7 +23,7 @@ export const refreshAccessToken = (user: User) => {
       tokenVersion: user.tokenVersion,
     },
     process.env.REFRESH_TOKEN_SECRET!,
-    { expiresIn: "15m" }
+    { expiresIn: "5m" }
   );
 };
 

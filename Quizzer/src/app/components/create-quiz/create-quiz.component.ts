@@ -143,19 +143,21 @@ export class CreateQuizComponent implements OnInit {
       return false;
     }
     this.validateForm();
-    const quiz = this.createQuiz();
-    this.quizService.sendQuiz(quiz).subscribe((x) => {
-      if (x.errors) {
-        console.log(x.errors);
-        this.message.error('Something went wrong...');
-      }
-      if (x.data.createQuiz) {
-        this.router.navigateByUrl('home');
-        this.message.success('Quiz created successfully');
-      } else {
-        this.message.error('Something went wrong...');
-      }
-    });
+    if (this.quiz.valid) {
+      const quiz = this.createQuiz();
+      this.quizService.sendQuiz(quiz).subscribe((x) => {
+        if (x.errors) {
+          console.log(x.errors);
+          this.message.error('Something went wrong...');
+        }
+        if (x.data.createQuiz) {
+          this.router.navigateByUrl('home');
+          this.message.success('Quiz created successfully');
+        } else {
+          this.message.error('Something went wrong...');
+        }
+      });
+    }
   }
 
   checkScore(): boolean {
